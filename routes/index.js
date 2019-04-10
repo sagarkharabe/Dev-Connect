@@ -1,5 +1,5 @@
 const router = require("express").Router();
-router.use("/users", require("./api/users"));
+router.use("/user", require("./api/users"));
 router.use("/profile", require("./api/profile.js"));
 router.use("/posts", require("./api/posts.js"));
 

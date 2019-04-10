@@ -19,8 +19,10 @@
   "homepage": "https://github.com/sagarkharbe/Dev-Connect#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
     "chalk": "^2.4.2",
     "express": "^4.16.4",
+    "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.5.0",
     "passport": "^0.4.0",
