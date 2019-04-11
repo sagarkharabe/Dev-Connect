@@ -3,8 +3,9 @@ const chalk = require("chalk");
 const app = express();
 const mongoose = require("mongoose");
 const keys = require("./config/keys");
-
-require('./config/app-middleware')(app)
+const passport = require("passport");
+require("./config/app-middleware")(app);
+require("./config/passport")(passport);
 mongoose.Promise = global.Promise;
 
 mongoose
@@ -14,9 +15,9 @@ mongoose
   })
   .then(() => console.log(chalk.magenta("Connection to MLab established...")))
   .catch(err => console.log(chalk.red("Mogoose conn Err -- ", err)));
-app.get("/", (req, res) => {
-  res.send(Hello);
-});
+
+app.use(passport.initialize());
+
 app.use("/api", require("./routes"));
 const port = process.env.PORT || 5001;
 

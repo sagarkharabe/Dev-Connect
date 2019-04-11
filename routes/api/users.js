@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const gravitar = require("gravatar");
 const { User } = require("../../models/index");
 const keys = require("../../config/keys");
+const passport = require("passport");
 
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
@@ -21,7 +22,7 @@ router.post("/login", (req, res) => {
         expiresIn: 3600
       });
       res.status(200).json({
-        token,
+        token: "Bearer " + token,
         user: user
       });
     });
@@ -67,7 +68,16 @@ router.post("/register", (req, res) => {
   });
 });
 
-router.get("/verify", (req, res) => {
-  res.send(req.user);
-});
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json({
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email,
+      avatar: req.user.avatar
+    });
+  }
+);
 module.exports = router;
