@@ -2,12 +2,18 @@ const router = require("express").Router();
 const { User, Profile } = require("../../models/index");
 const passport = require("passport");
 const chalk = require("chalk");
-
+const ValidateProfileInput = require("../../validation/profile");
 //logged in user will be able to create/update profile
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const { errors, isValid } = ValidateProfileInput(req.body);
+
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+
     const profileFields = {};
     profileFields.user = req.user._id;
     if (req.body.handle) profileFields.handle = req.body.handle;
@@ -30,24 +36,34 @@ router.post(
     if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
     if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
 
-    Profile.findOne({ user: req.user._id }).then(profile => {
-      if (profile) {
-        Profile.findByIdAndUpdate(
-          { user: req.user._id },
-          { $set: profileFields },
-          { new: true }
-        ).then(profile => res.json(profile));
-      } else {
-        //check if handle exists
-        Profile.findOne({ handle: profileFields.handle }).then(profile => {
-          if (profile) {
-            error.handle = "That handle already exists";
-            res.status(400).json(errors);
-          }
-          new Profile(profileFields).save().then(profile => res.json(profile));
-        });
-      }
-    });
+    Profile.findOne({ user: req.user._id })
+      .then(profile => {
+        if (profile) {
+          Profile.findOneAndUpdate(
+            { user: req.user._id },
+            { $set: profileFields },
+            { new: true }
+          )
+            .then(profile => res.json(profile))
+            .catch(err =>
+              console.log(chalk.red("Err at findByIdAndUpdate profile ", err))
+            );
+        } else {
+          //check if handle exists
+          Profile.findOne({ handle: profileFields.handle }).then(profile => {
+            if (profile) {
+              error.handle = "That handle already exists";
+              res.status(400).json(errors);
+            }
+            new Profile(profileFields)
+              .save()
+              .then(profile => res.json(profile));
+          });
+        }
+      })
+      .catch(err =>
+        console.log(chalk.red("Err at creating/updating profile ", err))
+      );
   }
 );
 
@@ -59,6 +75,7 @@ router.get(
     const errors = {};
     console.log(chalk.grey(" ", req.user));
     Profile.findOne({ user: req.user._id })
+      .populate("user", ["name", "avatar"])
       .then(profile => {
         if (!profile) {
           errors.noprofile = "There's no profile for this user.";
