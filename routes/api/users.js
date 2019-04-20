@@ -1,45 +1,58 @@
 const router = require("express").Router();
 const brcypt = require("bcryptjs");
 const mongoose = require("mongoose");
+const chalk = require("chalk");
 const jwt = require("jsonwebtoken");
 const gravitar = require("gravatar");
 const { User } = require("../../models/index");
 const keys = require("../../config/keys");
 const passport = require("passport");
-
+const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
 router.post("/login", (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
   const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ msg: "Please enter all fields" });
+  if (!isValid) {
+    return res.status(400).json(errors);
   }
   User.findOne({ email: req.body.email }).then(user => {
     if (!user) {
-      return res.status(401).json({ msg: "Email not registered" });
+      errors.email = "Email not Registered";
+      return res.status(401).json(errors);
     }
     brcypt.compare(password, user.password).then(async result => {
-      if (!result) return res.status(400).json({ msg: "Wrong Password" });
-      const token = await jwt.sign({ id: user.id }, keys.JWT_SECRECT_KEY, {
-        expiresIn: 3600
-      });
-      res.status(200).json({
-        token: "Bearer " + token,
-        user: user
-      });
+      try {
+        if (!result) return res.status(400).json({ msg: "Wrong Password" });
+        const token = await jwt.sign({ id: user.id }, keys.JWT_SECRET_KEY, {
+          expiresIn: 3600
+        });
+        return res.status(200).json({
+          token: "Bearer " + token,
+          succedd: true
+        });
+      } catch (err) {
+        console.log(chalk.red("Err at login route -- ", err));
+        errors.login = "Error While logging in.";
+        return res.status(400).json(errors);
+      }
     });
   });
 });
 
 router.post("/register", (req, res) => {
-  console.log(req.body);
-  const { email, password, name } = req.body;
-  if (!email || !password || !name) {
-    return res.status(400).json({ msg: "Please enter all fields" });
+  const { errors, isValid } = validateRegisterInput(req.body);
+  console.log("isValid ", isValid);
+  if (!isValid) {
+    return res.status(400).json(errors);
   }
-  User.findOne({ email: req.body.email }).then(user => {
+  const { email, password, name } = req.body;
+
+  User.findOne({ email }).then(user => {
     if (user) {
-      return res.status(401).json({ msg: "Email already registered" });
+      errors.email = "Email already registered";
+      return res.status(401).json({ errors });
     }
-    const avatar = gravitar.url(req.body.email, {
+    const avatar = gravitar.url(email, {
       s: "200",
       r: "pg",
       d: "mm"
@@ -57,11 +70,12 @@ router.post("/register", (req, res) => {
         newUser
           .save()
           .then(user => {
-            res.json(user);
+            return res.json(user);
           })
           .catch(err => {
+            email.save = "There was a error while Registering.";
             console.log("Err at create user -- ", err);
-            res.status(400).json({ msg: "Error while creating new User." });
+            return res.status(400).json(errors);
           });
       });
     });
@@ -75,8 +89,7 @@ router.get(
     res.json({
       id: req.user.id,
       name: req.user.name,
-      email: req.user.email,
-      avatar: req.user.avatar
+      email: req.user.email
     });
   }
 );
