@@ -167,4 +167,87 @@ router.post(
   }
 );
 
+//logged in users can comment on post
+
+router.post(
+  "/comment/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = ValidatePostInput(req.body);
+    if (!isValid) return res.status(400).json(errors);
+
+    Post.findById(req.params.id)
+      .then(post => {
+        const newComment = {
+          text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          user: req.user._id
+        };
+        post.comments.unshift(newComment);
+        post
+          .save()
+          .then(post => res.json(post))
+          .catch(err => {
+            console.log(chalk.red("Error at saving the comment ", err));
+            return res
+              .status(400)
+              .json({ error: "Error at saving your comment" });
+          });
+      })
+      .catch(err => {
+        console.log(chalk.red("Error at the comment route -- ", err));
+        return res.status(400).json({ error: "Error at saving your comment" });
+      });
+  }
+);
+
+//logged in users can delete any of their comment on any post
+
+router.delete(
+  "/comment/:id/:comment_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then(post => {
+        console.log(
+          "Has comment  -- ",
+          post.comments.filter(
+            comment => comment.user.toString() == req.params.comment_id
+          ).length
+        );
+        if (
+          post.comments.filter(
+            comment => comment.user.toString() == req.params.comment_id
+          ).length === 0
+        )
+          return res
+            .status(400)
+            .json({ alreadyLiked: "There is no comment with id" });
+
+        const removeIndex = post.commments
+          .map(comment => comment.user.toString())
+          .indexOf(req.params.comment_id);
+
+        post.comments.splice(removeIndex, 1);
+
+        post
+          .save()
+          .then(post => res.json(post))
+          .catch(err => {
+            console.log(
+              chalk.red("Error at saving the delete the comment ", err)
+            );
+            return res
+              .status(400)
+              .json({ error: "Error at saving your changes" });
+          });
+      })
+      .catch(err => {
+        console.log(chalk.red("Error at the comment delete route -- ", err));
+        return res.status(400).json({ error: "Error at saving your changes" });
+      });
+  }
+);
+
 module.exports = router;
