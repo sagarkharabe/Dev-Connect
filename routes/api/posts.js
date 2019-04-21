@@ -71,8 +71,98 @@ router.delete(
           });
       })
       .catch(err => {
-        console.log(chalk.red("Error at finding user profile -- ", err));
-        return res.status(404).json({ post: "Error at finding user profile " });
+        console.log(chalk.red("Error at deleting the post -- ", err));
+        return res.status(404).json({ post: "Error at deleting the post " });
+      });
+  }
+);
+
+// logged in users can like a post
+router.post(
+  "/like/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        Post.findById(req.params.id)
+          .then(post => {
+            if (
+              post.likes.filter(like => like.user.toString() == req.user._id)
+                .length > 0
+            )
+              return res
+                .status(400)
+                .json({ alreadyLiked: "User already liked this post" });
+
+            post.likes.unshift({ user: req.user._id });
+            post
+              .save()
+              .then(post => res.json(post))
+              .catch(err => {
+                console.log(chalk.red("error at liking a post -- ", err));
+                res.status(400).json({ error: "Error while saving the like" });
+              });
+          })
+          .catch(err => {
+            console.log(chalk.red("Error at liking a post -- ", err));
+            return res
+              .status(404)
+              .json({ error: "Error while liking the post." });
+          });
+      })
+      .catch(err => {
+        console.log(chalk.red("Error while liking a post -- ", err));
+        return res.status(404).json({ error: "Error while liking a post " });
+      });
+  }
+);
+//logged in users can unlike a posts
+router.post(
+  "/unlike/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        Post.findById(req.params.id)
+          .then(post => {
+            console.log(
+              "Has user liked it -- ",
+              post.likes.filter(like => like.user.toString() == req.user._id)
+                .length
+            );
+            if (
+              post.likes.filter(like => like.user.toString() == req.user._id)
+                .length === 0
+            )
+              return res
+                .status(400)
+                .json({ alreadyLiked: "User hasn't liked the post yet." });
+
+            const removeIndex = post.likes
+              .map(item => item.user.toString())
+              .indexOf(req.user._id);
+
+            post.likes.splice(removeIndex, 1);
+            post
+              .save()
+              .then(post => res.json(post))
+              .catch(err => {
+                console.log(chalk.red("error at unliking a post -- ", err));
+                res
+                  .status(400)
+                  .json({ error: "Error while saving the unlike" });
+              });
+          })
+          .catch(err => {
+            console.log(chalk.red("Error at unliking a post -- ", err));
+            return res
+              .status(404)
+              .json({ error: "Error while unliking the post." });
+          });
+      })
+      .catch(err => {
+        console.log(chalk.red("Error while unliking a post -- ", err));
+        return res.status(404).json({ error: "Error while unliking a post " });
       });
   }
 );
