@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const brcypt = require("bcryptjs");
-const mongoose = require("mongoose");
 const chalk = require("chalk");
 const jwt = require("jsonwebtoken");
 const gravitar = require("gravatar");
@@ -28,7 +27,7 @@ router.post("/login", (req, res) => {
         });
         return res.status(200).json({
           token: "Bearer " + token,
-          succedd: true
+          success: true
         });
       } catch (err) {
         console.log(chalk.red("Err at login route -- ", err));
