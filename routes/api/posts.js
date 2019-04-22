@@ -213,19 +213,19 @@ router.delete(
         console.log(
           "Has comment  -- ",
           post.comments.filter(
-            comment => comment.user.toString() == req.params.comment_id
+            comment => comment._id.toString() == req.params.comment_id
           ).length
         );
         if (
           post.comments.filter(
-            comment => comment.user.toString() == req.params.comment_id
+            comment => comment._id.toString() == req.params.comment_id
           ).length === 0
         )
           return res
             .status(400)
-            .json({ alreadyLiked: "There is no comment with id" });
+            .json({ commentnotexists: "There is no comment with id" });
 
-        const removeIndex = post.commments
+        const removeIndex = post.comments
           .map(comment => comment.user.toString())
           .indexOf(req.params.comment_id);
 
