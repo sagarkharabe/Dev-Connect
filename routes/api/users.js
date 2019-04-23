@@ -22,9 +22,13 @@ router.post("/login", (req, res) => {
     brcypt.compare(password, user.password).then(async result => {
       try {
         if (!result) return res.status(400).json({ msg: "Wrong Password" });
-        const token = await jwt.sign({ id: user.id }, keys.JWT_SECRET_KEY, {
-          expiresIn: 3600
-        });
+        const token = await jwt.sign(
+          { id: user.id, avatar: user.avatar, name: user.name },
+          keys.JWT_SECRET_KEY,
+          {
+            expiresIn: 3600
+          }
+        );
         return res.status(200).json({
           token: "Bearer " + token,
           success: true

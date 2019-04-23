@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-import { setCurrentUser } from "./actions/authAction";
+import { setCurrentUser, logout } from "./actions/authAction";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
@@ -18,6 +18,11 @@ class App extends Component {
       setAuthToken(localStorage.getItem("jwtToken"));
       const decoded = jwt_decode(localStorage.jwtToken);
       this.props.setCurrentUser(decoded);
+      //check for expired token
+      const currentTime = Date.now() / 1000;
+      if (decoded.exp < currentTime) {
+        this.props.logout();
+      }
     }
   }
   render() {
@@ -39,5 +44,5 @@ class App extends Component {
 
 export default connect(
   null,
-  { setCurrentUser }
+  { setCurrentUser, logout }
 )(App);

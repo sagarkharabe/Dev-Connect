@@ -25,6 +25,12 @@ export const login = userData => async dispatch => {
   }
 };
 
+export const logout = () => dispatch => {
+  localStorage.removeItem("jwtToken");
+  setAuthToken(false);
+  dispatch(setCurrentUser({}));
+};
+
 export const setCurrentUser = decoded => {
   return {
     type: SET_CURRENT_USER,
