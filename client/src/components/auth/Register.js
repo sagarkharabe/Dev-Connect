@@ -42,6 +42,11 @@ class Register extends React.Component {
       });
     }
   }
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
   render() {
     const { errors } = this.state;
 

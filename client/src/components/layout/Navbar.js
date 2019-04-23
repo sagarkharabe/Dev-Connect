@@ -6,7 +6,7 @@ import { logout } from "../../actions/authAction";
 class Navbar extends Component {
   static propTypes = {
     logout: PropTypes.func.isRequired,
-    auth: PropTypes.func.isRequired
+    auth: PropTypes.object.isRequired
   };
   handleLogout = () => {
     this.props.logout();
