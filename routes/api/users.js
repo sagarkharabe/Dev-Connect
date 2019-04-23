@@ -21,7 +21,8 @@ router.post("/login", (req, res) => {
     }
     brcypt.compare(password, user.password).then(async result => {
       try {
-        if (!result) return res.status(400).json({ msg: "Wrong Password" });
+        if (!result)
+          return res.status(400).json({ password: "Wrong Password" });
         const token = await jwt.sign(
           { id: user.id, avatar: user.avatar, name: user.name },
           keys.JWT_SECRET_KEY,
