@@ -31,7 +31,6 @@ export const logout = () => dispatch => {
   setAuthToken(false);
   dispatch(setCurrentUser({}));
   dispatch(clearCurrentProfile());
-  window.location.href = "/login";
 };
 
 export const setCurrentUser = decoded => {
