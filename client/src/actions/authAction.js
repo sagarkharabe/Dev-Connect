@@ -2,6 +2,7 @@ import { SET_CURRENT_USER, GET_ERRORS } from "./types";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "../utils/setAuthToken";
+import { clearCurrentProfile } from "./profileAction";
 export const registerUser = (newUser, history) => async dispatch => {
   try {
     await axios.post("/api/users/register", newUser);
@@ -29,6 +30,8 @@ export const logout = () => dispatch => {
   localStorage.removeItem("jwtToken");
   setAuthToken(false);
   dispatch(setCurrentUser({}));
+  dispatch(clearCurrentProfile());
+  window.location.href = "/login";
 };
 
 export const setCurrentUser = decoded => {

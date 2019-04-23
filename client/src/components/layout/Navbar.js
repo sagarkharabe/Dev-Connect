@@ -8,7 +8,8 @@ class Navbar extends Component {
     logout: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
   };
-  handleLogout = () => {
+  handleLogout = e => {
+    e.preventDefault();
     this.props.logout();
   };
   render() {
