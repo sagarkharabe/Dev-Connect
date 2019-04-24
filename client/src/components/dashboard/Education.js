@@ -2,30 +2,30 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Moment from "react-moment";
-import { deleteExperience } from "../../actions/profileAction";
-class Experience extends Component {
+import { deleteEducation } from "../../actions/profileAction";
+class Education extends Component {
   static propTypes = {
-    deleteExperience: PropTypes.func.isRequired
+    deleteEducation: PropTypes.func.isRequired
   };
   onDeleteClick = id => {
-    this.props.deleteExperience(id);
+    this.props.deleteEducation(id);
   };
   render() {
-    const experience = this.props.experience.map(exp => (
-      <tr key={exp._id}>
-        <td>{exp.company}</td>
-        <td>{exp.title}</td>
+    const education = this.props.education.map(edu => (
+      <tr key={edu._id}>
+        <td>{edu.school}</td>
+        <td>{edu.degree}</td>
         <td>
-          <Moment format="YYYY/MM/DD">{exp.from}</Moment> -
-          {exp.to === null ? (
+          <Moment format="YYYY/MM/DD">{edu.from}</Moment> -
+          {edu.to === null ? (
             "Now"
           ) : (
-            <Moment format="YYYY/MM/DD">{exp.to}</Moment>
+            <Moment format="YYYY/MM/DD">{edu.to}</Moment>
           )}
         </td>
         <td>
           <button
-            onClick={() => this.onDeleteClick(exp._id)}
+            onClick={() => this.onDeleteClick(edu._id)}
             className="btn btn-danger"
           >
             Delete
@@ -35,17 +35,17 @@ class Experience extends Component {
     ));
     return (
       <div>
-        <h4 className="mb-4">Experience Credentials</h4>
+        <h4 className="mb-4">Education Credentials</h4>
         <table className="table">
           <thead>
             <tr>
-              <th>Company</th>
-              <th>Title</th>
+              <th>School</th>
+              <th>Degree</th>
               <th>Years</th>
               <th />
             </tr>
           </thead>
-          <tbody>{experience}</tbody>
+          <tbody>{education}</tbody>
         </table>
       </div>
     );
@@ -58,5 +58,5 @@ const mapStateToProps = ({}) => {
 
 export default connect(
   mapStateToProps,
-  { deleteExperience }
-)(Experience);
+  { deleteEducation }
+)(Education);

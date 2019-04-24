@@ -6,6 +6,7 @@ import Spinner from "../common/Spinner";
 import { Link } from "react-router-dom";
 import ProfileActions from "./ProfileActions";
 import Experience from "./Experience";
+import Education from "./Education";
 class Dashboard extends Component {
   static propTypes = {
     profile: PropTypes.object.isRequired,
@@ -33,7 +34,7 @@ class Dashboard extends Component {
           </p>
           <ProfileActions />
           <Experience experience={profile.experience} />
-          {/* todo -- experience and education */}
+          <Education education={profile.education} />
           <div className="" style={{ marginBottom: "60px" }}>
             <button
               onClick={this.onDeleteClick}

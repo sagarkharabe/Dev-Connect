@@ -45,6 +45,24 @@ export const addEducation = (edu, history) => async dispatch => {
   }
 };
 
+export const deleteExperience = id => async dispatch => {
+  try {
+    const res = await axios.delete(`/api/profile/experience/${id}`);
+    dispatch({ type: GET_PROFILE, payload: res.data });
+  } catch (err) {
+    dispatch({ type: GET_ERRORS, payload: err.response.data });
+  }
+};
+export const deleteEducation = id => async dispatch => {
+  console.log("DELETE ID ", id);
+  try {
+    const res = await axios.delete(`/api/profile/education/${id}`);
+    dispatch({ type: GET_PROFILE, payload: res.data });
+  } catch (err) {
+    dispatch({ type: GET_ERRORS, payload: err.response.data });
+  }
+};
+
 export const deleteAccount = () => async dispatch => {
   try {
     if (window.confirm("Are you sure ? This can NOT be undone!")) {

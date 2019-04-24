@@ -270,7 +270,7 @@ router.delete(
             .json({ noprofile: "There is no profile for this user." });
 
         const removeIndex = profile.education
-          .map(item => item._id)
+          .map(item => item.id)
           .indexOf(req.params.edu_id);
 
         profile.education.splice(removeIndex, 1);
