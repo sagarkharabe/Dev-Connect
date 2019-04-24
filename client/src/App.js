@@ -17,6 +17,7 @@ import PrivateRoute from "./components/common/PrivateRoute";
 import AddExperience from "./components/add-credentials/AddExperience";
 import AddEducation from "./components/add-credentials/AddEducation";
 import Profiles from "./components/profiles/Profiles";
+import Profile from "./components/profile/Profile";
 
 class App extends Component {
   componentDidMount() {
@@ -74,6 +75,9 @@ class App extends Component {
                 path="/add-education"
                 component={AddEducation}
               />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/profile/:handle" component={Profile} />
             </Switch>
           </div>
           <Footer />
