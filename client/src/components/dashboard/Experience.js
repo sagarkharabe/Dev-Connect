@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
-
+import moment from "react-moment";
 class Experience extends Component {
   static propTypes = {};
   render() {
