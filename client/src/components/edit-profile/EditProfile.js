@@ -121,36 +121,41 @@ class EditProfile extends Component {
           <InputGroup
             placeholder="FaceBook Profile URL"
             name="facebook"
+            value={this.state.facebook}
             icon="fab fa-facebook"
-            onChange={this.onChange}
+            onChange={this.handleChange}
             error={errors.facebook}
           />
           <InputGroup
             placeholder="Twitter Profile URL"
             name="twitter"
+            value={this.state.twitter}
             icon="fab fa-twitter"
-            onChange={this.onChange}
+            onChange={this.handleChange}
             error={errors.twitter}
           />
           <InputGroup
             placeholder="LinkedIn Profile URL"
             name="linkedIn"
+            value={this.state.linkedIn}
             icon="fab fa-linkedin"
-            onChange={this.onChange}
+            onChange={this.handleChange}
             error={errors.linkedIn}
           />
           <InputGroup
             placeholder="Instagram Profile URL"
             name="instagram"
             icon="fab fa-instagram"
-            onChange={this.onChange}
+            value={this.state.instagram}
+            onChange={this.handleChange}
             error={errors.instagram}
           />
           <InputGroup
             placeholder="Youtube Profile URL"
             name="youtube"
             icon="fab fa-youtube"
-            onChange={this.onChange}
+            value={this.state.youtube}
+            onChange={this.handleChange}
             error={errors.youtube}
           />
         </div>

@@ -4,7 +4,8 @@ import {
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS,
-  SET_CURRENT_USER
+  SET_CURRENT_USER,
+  GET_PROFILES
 } from "./types";
 
 export const getCurrentProfile = () => async dispatch => {
@@ -24,6 +25,16 @@ export const createProfile = (profile, history) => async dispatch => {
     history.push("/dashboard");
   } catch (err) {
     dispatch({ type: GET_ERRORS, payload: err.response.data });
+  }
+};
+
+export const getProfiles = () => async dispatch => {
+  try {
+    dispatch(setProfileLoading());
+    const res = await axios.get("/api/profile/all");
+    dispatch({ type: GET_PROFILES, payload: res.data });
+  } catch (err) {
+    dispatch({ type: GET_PROFILES, payload: null });
   }
 };
 
