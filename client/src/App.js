@@ -12,7 +12,9 @@ import Register from "./components/auth/Register";
 import { connect } from "react-redux";
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
+import EditProfile from "./components/edit-profile/EditProfile";
 import PrivateRoute from "./components/common/PrivateRoute";
+
 class App extends Component {
   componentDidMount() {
     //check for token
@@ -40,10 +42,19 @@ class App extends Component {
             <Route path="/login" exact component={Login} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
+            </Switch>
+            <Switch>
               <PrivateRoute
                 exact
                 path="/create-profile"
                 component={CreateProfile}
+              />
+            </Switch>
+            <Switch>
+              <PrivateRoute
+                exact
+                path="/edit-profile"
+                component={EditProfile}
               />
             </Switch>
           </div>

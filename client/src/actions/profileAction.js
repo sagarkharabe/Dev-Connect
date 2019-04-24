@@ -3,15 +3,13 @@ import {
   GET_PROFILE,
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
-  GET_ERRORS
+  GET_ERRORS,
+  SET_CURRENT_USER
 } from "./types";
-import setAuthToken from "../utils/setAuthToken";
 
 export const getCurrentProfile = () => async dispatch => {
   dispatch(setProfileLoading());
   try {
-    const token = localStorage.getItem("jwtToken");
-    setAuthToken(token);
     const res = await axios.get("/api/profile");
     dispatch({ type: GET_PROFILE, payload: res.data });
   } catch (err) {
@@ -21,11 +19,20 @@ export const getCurrentProfile = () => async dispatch => {
 };
 
 export const createProfile = (profile, history) => async dispatch => {
-  const token = localStorage.getItem("jwtToken");
-  setAuthToken(token);
   try {
     await axios.post("/api/profile", profile);
     history.push("/dashboard");
+  } catch (err) {
+    dispatch({ type: GET_ERRORS, payload: err.response.data });
+  }
+};
+
+export const deleteAccount = () => async dispatch => {
+  try {
+    if (window.confirm("Are you sure ? This can NOT be undone!")) {
+      await axios.delete("/api/profile");
+      dispatch({ type: SET_CURRENT_USER, payload: {} });
+    }
   } catch (err) {
     dispatch({ type: GET_ERRORS, payload: err.response.data });
   }

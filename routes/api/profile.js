@@ -316,7 +316,6 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log("AUTH -- ", req.headers.authorization);
     const errors = {};
     console.log(chalk.grey(" ", req.user));
     Profile.findOne({ user: req.user._id })

@@ -1,18 +1,24 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getCurrentProfile } from "../../actions/profileAction";
+import { getCurrentProfile, deleteAccount } from "../../actions/profileAction";
 import Spinner from "../common/Spinner";
 import { Link } from "react-router-dom";
+import ProfileActions from "./ProfileActions";
+
 class Dashboard extends Component {
   static propTypes = {
     profile: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
-    getCurrentProfile: PropTypes.func.isRequired
+    getCurrentProfile: PropTypes.func.isRequired,
+    deleteAccount: PropTypes.func.isRequired
   };
   componentDidMount() {
     this.props.getCurrentProfile();
   }
+  onDeleteClick = e => {
+    this.props.deleteAccount();
+  };
   render() {
     const { user } = this.props.auth;
     const { profile, loading } = this.props.profile;
@@ -20,7 +26,20 @@ class Dashboard extends Component {
     if (profile === null || loading) {
       dashboardContent = <Spinner />;
     } else if (Object.keys(profile).length > 0) {
-      dashboardContent = <h4>Display Profile</h4>;
+      dashboardContent = (
+        <div>
+          <p className="lead text-muted">
+            Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>{" "}
+          </p>
+          <ProfileActions />
+          {/* todo -- experience and education */}
+          <div className="" style={{ marginBottom: "60px" }}>
+            <button onClick={this.onDeleteClick} className="btn btn-danger">
+              Delete My Account
+            </button>
+          </div>
+        </div>
+      );
     } else {
       dashboardContent = (
         <div>
@@ -52,5 +71,5 @@ const mapStateToProps = ({ auth, profile }) => {
 
 export default connect(
   mapStateToProps,
-  { getCurrentProfile }
+  { getCurrentProfile, deleteAccount }
 )(Dashboard);
