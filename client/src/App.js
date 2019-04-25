@@ -19,6 +19,7 @@ import AddEducation from "./components/add-credentials/AddEducation";
 import Profiles from "./components/profiles/Profiles";
 import Profile from "./components/profile/Profile";
 import NotFound from "./components/not-found/NotFound";
+import Posts from "./components/posts/Posts";
 
 class App extends Component {
   componentDidMount() {
@@ -52,6 +53,9 @@ class App extends Component {
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
             </Switch>
             <Switch>
+              <PrivateRoute exact path="/feed" component={Posts} />
+            </Switch>
+            <Switch>
               <PrivateRoute
                 exact
                 path="/create-profile"
@@ -79,6 +83,7 @@ class App extends Component {
                 component={AddEducation}
               />
             </Switch>
+
             <Route exact path="/not-found" exact component={NotFound} />
           </div>
           <Footer />
