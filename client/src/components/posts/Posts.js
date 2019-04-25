@@ -4,7 +4,6 @@ import PostForm from "./PostForm";
 import Spinner from "../common/Spinner";
 import PropTypes from "prop-types";
 import { getPosts } from "../../actions/postAction";
-import { Link } from "react-router-dom";
 import PostFeed from "./PostFeed";
 class Post extends Component {
   static propType = {
