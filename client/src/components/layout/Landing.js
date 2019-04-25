@@ -7,9 +7,8 @@ class Landing extends Component {
   static propTypes = {
     auth: PropTypes.object.isRequired
   };
-  componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      console.log(this.props.auth.isAuthenticated);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/dashboard");
     }
   }

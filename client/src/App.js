@@ -18,6 +18,7 @@ import AddExperience from "./components/add-credentials/AddExperience";
 import AddEducation from "./components/add-credentials/AddEducation";
 import Profiles from "./components/profiles/Profiles";
 import Profile from "./components/profile/Profile";
+import NotFound from "./components/not-found/NotFound";
 
 class App extends Component {
   componentDidMount() {
@@ -40,6 +41,7 @@ class App extends Component {
       <div className="App">
         <Router>
           <Navbar />
+          <Route path="/" exact component={Landing} />
 
           <div className="container">
             <Route path="/register" exact component={Register} />
@@ -77,6 +79,7 @@ class App extends Component {
                 component={AddEducation}
               />
             </Switch>
+            <Route exact path="/not-found" exact component={NotFound} />
           </div>
           <Footer />
         </Router>
