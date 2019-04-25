@@ -37,6 +37,23 @@ export const deletePost = id => async dispatch => {
   }
 };
 
+export const addLike = id => async dispatch => {
+  try {
+    await axios.post(`/api/posts/like/${id}`);
+    dispatch(getPosts());
+  } catch (err) {
+    dispatch({ type: GET_ERRORS, payload: err.response.data });
+  }
+};
+
+export const removeLike = id => async dispatch => {
+  try {
+    await axios.post(`/api/posts/unlike/${id}`);
+    dispatch(getPosts());
+  } catch (err) {
+    dispatch({ type: GET_ERRORS, payload: err.response.data });
+  }
+};
 export const setPostLoading = () => {
   return {
     type: POST_LOADING
