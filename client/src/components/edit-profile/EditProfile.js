@@ -212,7 +212,7 @@ class EditProfile extends Component {
                   info="Could be your own company or one you work for. "
                 />
                 <TextFieldGroup
-                  placeholder="Website"
+                  placeholder="http://example.com"
                   name="website"
                   value={this.state.website}
                   onChange={this.handleChange}

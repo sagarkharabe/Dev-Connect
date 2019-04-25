@@ -40,10 +40,11 @@ class App extends Component {
       <div className="App">
         <Router>
           <Navbar />
-          <Route path="/" exact component={Landing} />
+
           <div className="container">
             <Route path="/register" exact component={Register} />
             <Route path="/login" exact component={Login} />
+            <Route path="/profile/:handle" exact component={Profile} />
             <Route path="/profiles" exact component={Profiles} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
@@ -75,9 +76,6 @@ class App extends Component {
                 path="/add-education"
                 component={AddEducation}
               />
-            </Switch>
-            <Switch>
-              <PrivateRoute exact path="/profile/:handle" component={Profile} />
             </Switch>
           </div>
           <Footer />
