@@ -131,7 +131,7 @@ router.post(
                 .length
             );
             if (
-              post.likes.filter(like => like.user.toString() == req.user._id)
+              post.likes.filter(like => like.user.toString() == req.user.id)
                 .length === 0
             )
               return res
@@ -140,7 +140,7 @@ router.post(
 
             const removeIndex = post.likes
               .map(item => item.user.toString())
-              .indexOf(req.user._id);
+              .indexOf(req.user.id);
 
             post.likes.splice(removeIndex, 1);
             post
