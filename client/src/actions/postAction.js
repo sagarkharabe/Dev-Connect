@@ -64,6 +64,24 @@ export const removeLike = id => async dispatch => {
     dispatch({ type: GET_ERRORS, payload: err.response.data });
   }
 };
+
+export const addComment = (postId, commentData) => async dispatch => {
+  try {
+    const res = await axios.post(`/api/posts/comment/${postId}`, commentData);
+    dispatch({ type: GET_POST, payload: res.data });
+    dispatch({ type: CLEAR_ERRORS });
+  } catch (err) {
+    dispatch({ type: GET_ERRORS, payload: err.response.data });
+  }
+};
+export const deleteComment = (postId, commentId) => async dispatch => {
+  try {
+    const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`);
+    dispatch({ type: GET_POST, payload: res.data });
+  } catch (err) {
+    dispatch({ type: GET_ERRORS, payload: err.response.data });
+  }
+};
 export const setPostLoading = () => {
   return {
     type: POST_LOADING

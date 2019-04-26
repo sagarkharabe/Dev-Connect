@@ -8,8 +8,7 @@ export default function(state = initialState, action) {
       return action.payload;
     case CLEAR_ERRORS:
       return {
-        ...state,
-        errors: null
+        ...initialState
       };
     default:
       return state;

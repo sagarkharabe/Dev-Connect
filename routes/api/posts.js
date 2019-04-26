@@ -226,7 +226,7 @@ router.delete(
             .json({ commentnotexists: "There is no comment with id" });
 
         const removeIndex = post.comments
-          .map(comment => comment.user.toString())
+          .map(comment => comment._id.toString())
           .indexOf(req.params.comment_id);
 
         post.comments.splice(removeIndex, 1);
